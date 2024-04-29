@@ -412,3 +412,225 @@ console.log(Pengguna.fullName);
 Pengguna.fullName = 'Fulan Fulanah';
 console.log(Pengguna);
 console.log(Pengguna.fullName);
+
+
+
+
+
+/* Inheritance */
+
+// Superclass
+class MailService {
+    constructor(sender) {
+        this.sender = sender;
+    }
+
+    sendMessage(message, receiver) {
+        console.log(`${this.sender} sent ${message} to ${receiver}`);
+    }
+}
+
+// Subclass
+class WhatsAppService extends MailService {
+    sendBroadcastMessage(message, receivers) {
+        for (const receiver of receivers) {
+            this.sendMessage(message, receiver);
+        }
+    }
+}
+
+// Subclass
+class EmailService extends MailService {
+    sendDelayedMessage(message, receiver, delay) {
+        setTimeout(() => {
+            this.sendMessage(message, receiver);
+        }, delay);
+    }
+}
+const whatsapp = new WhatsAppService('+6281234567890');
+const email = new EmailService('rehan121203@gmail.com');
+
+whatsapp.sendMessage('halo', '+6289876543210');
+whatsapp.sendBroadcastMessage('Hello', ['+6289876543210', '+6282234567890']);
+// whatsapp.sendDelayedMessage(); // Error
+
+email.sendMessage('Hello', 'john@gmail.com');
+email.sendDelayedMessage('Hello', 'john@gmail.com', 5000);
+// email.sendBroadcastMessage(); // Error
+
+
+
+// Ini inheritance menggunakan constructor function
+function MailServices(sender) {
+    this.sender = sender;
+}
+
+MailServices.prototype.sendMessage = function (message, receiver) {
+    console.log(`${this.sender} sent ${message} to ${receiver}`);
+}
+
+function WhatsAppServices(sender) {
+    MailServices.call(this, sender);
+}
+
+// Prototype inheritance
+WhatsAppServices.prototype = Object.create(MailServices.prototype);
+WhatsAppServices.prototype.constructor = WhatsAppServices;
+
+WhatsAppServices.prototype.sendBroadcastMessage = function (message, receivers) {
+    for (const receiver of receivers) {
+        this.sendMessage(message, receiver);
+    }
+}
+
+function GmailService(sender) {
+    MailServices.call(this, sender);
+}
+
+// Prototype inheritance
+GmailService.prototype = Object.create(MailServices.prototype);
+GmailService.prototype.constructor = GmailService;
+
+GmailService.prototype.sendDelayedMessage = function (message, receiver, delay) {
+    setTimeout(() => {
+        this.sendMessage(message, receiver);
+    }, delay);
+}
+
+const wa = new WhatsAppServices('+6281234567890');
+const gmail = new GmailService('dimas@dicoding.com');
+console.log(wa instanceof WhatsAppServices);
+console.log(gmail instanceof GmailService); // instanceof untuk memeriksa jenis objek
+console.log(wa instanceof GmailService);
+wa.sendMessage('Hello', '+6289876543210');
+wa.sendBroadcastMessage('Hello', ['+6289876543210', '+6282234567890']);
+gmail.sendMessage('Hello', 'john@doe.com');
+gmail.sendDelayedMessage('Hello', 'john@doe.com', 3000);
+
+
+
+/* Overriding */
+
+//overriding constructor
+class MailServiced {
+    constructor(sender) {
+        this.sender = sender;
+    }
+}
+
+class WhatsAppServiced extends MailServiced {
+    // overriding constructor
+    constructor(sender, isBusiness) { //mendefinisikan constructor kembali teteapi menggunakan super() untuk properti sender dari induknya.
+        super(sender);
+        this.isBusiness = isBusiness;
+    }
+}
+
+
+
+
+// Overriding Method
+class Mail {
+    constructor(sender) {
+        this.sender = sender;
+    }
+
+    kirimPesan(message, receiver) {
+        console.log(`${this.sender} sent ${message} to ${receiver}`)
+    }
+}
+
+class WaService extends Mail {
+    constructor(sender, isBusiness) {
+        super(sender);
+        this.isBusiness = isBusiness;
+    }
+
+    //method overriding
+    kirimPesan(message, receiver) {
+        console.log(`${this.sender} sent ${message} to ${receiver} via WhatsApp`)
+    }
+}
+
+const waweb = new WaService("081273469999", false);
+
+waweb.kirimPesan("Halo semangat yaaa", "Kontak Keisha Salsabila");
+
+
+
+
+/* Object Composition */
+class Developer {
+    constructor(name) {
+        this.name = name;
+    }
+
+    commitChanges() {
+        console.log(`${this.name} is committing changes...`);
+    }
+}
+
+function canBuildUI(developer) {
+    return {
+        buildUI: () => {
+            console.log(`${developer.name} is building UI...`);
+        }
+    }
+}
+
+function canBuildAPI(developer) {
+    return {
+        buildAPI: () => {
+            console.log(`${developer.name} is building API...`);
+        }
+    }
+}
+
+function canDeployApp(developer) {
+    return {
+        deployApp: () => {
+            console.log(`${developer.name} is deploying app...`);
+        }
+    }
+}
+
+function createFrontEndDeveloper(name) {
+    const developer = new Developer(name);
+    return Object.assign(developer, canBuildUI(developer));
+}
+
+function createBackEndDeveloper(name) {
+    const developer = new Developer(name);
+    return Object.assign(developer, canBuildAPI(developer));
+}
+
+function createDevOps(name) {
+    const developer = new Developer(name);
+    return Object.assign(developer, canDeployApp(developer));
+}
+
+function createFullStackDeveloper(name) {
+    const developer = new Developer(name);
+    return Object.assign(developer, canBuildUI(developer), canBuildAPI(developer), canDeployApp(developer));
+}
+
+const frontEndDeveloper = createFrontEndDeveloper('Rehan');
+frontEndDeveloper.commitChanges();
+frontEndDeveloper.buildUI();
+console.log(`is ${frontEndDeveloper.name} developer? `, frontEndDeveloper instanceof Developer);
+
+const backEndDeveloper = createBackEndDeveloper('Dea Afrizal');
+backEndDeveloper.commitChanges();
+backEndDeveloper.buildAPI();
+console.log(`is ${backEndDeveloper.name} developer? `, backEndDeveloper instanceof Developer);
+
+const devOpsDeveloper = createDevOps('Yama Roni');
+devOpsDeveloper.commitChanges();
+devOpsDeveloper.deployApp();
+console.log(`is ${devOpsDeveloper.name} developer? `, devOpsDeveloper instanceof Developer);
+
+const fullStackDeveloper = createFullStackDeveloper('Sandhika Galih');
+fullStackDeveloper.buildUI();
+fullStackDeveloper.buildAPI();
+fullStackDeveloper.deployApp();
+console.log(`is ${fullStackDeveloper.name} developer? `, fullStackDeveloper instanceof Developer);
