@@ -634,3 +634,358 @@ fullStackDeveloper.buildUI();
 fullStackDeveloper.buildAPI();
 fullStackDeveloper.deployApp();
 console.log(`is ${fullStackDeveloper.name} developer? `, fullStackDeveloper instanceof Developer);
+
+
+
+
+
+/* Bulit -in Class ada Date,Array,Object,Math,String.*/
+
+const date = new Date();
+
+const timeInJakarta = date.toLocaleString('id-ID', {
+    timeZone: 'Asia/Jakarta'
+});
+
+const timeInTokyo = date.toLocaleString('ja-JP', {
+    timeZone: 'Asia/Tokyo'
+});
+
+console.log("Waktu Live Di Tokyo : " + timeInTokyo);
+console.log("Waktu Live Jakarta : " + timeInJakarta);
+
+
+
+
+//penggunaan built in class dari array
+class UniqueArray extends Array {
+    constructor(...args) {
+        // make sure args is unique before passing it to super
+        const uniqueValue = args.filter((item, index) => args.indexOf(item) === index);
+
+        super(...uniqueValue);
+    }
+
+    push(item) {
+        // make sure only unique item is added
+        if (!this.includes(item)) {
+            super.push(item);
+        }
+    }
+}
+
+const someArray = new UniqueArray('a', 'b', 'c', 'a', 'b', 'c');
+console.log(someArray); // ['a', 'b', 'c']
+someArray.push('d');
+console.log(someArray); // ['a', 'b', 'c', 'd']
+someArray.push('a');
+console.log(someArray); // ['a', 'b', 'c', 'd']
+
+
+
+
+  /**
+ * TODO:
+ * 1. Buatlah class bernama Animal dengan ketentuan:
+ *    - Memiliki properti:
+ *      - name: string
+ *      - age: int
+ *      - isMammal: boolean
+ *    - Memiliki constructor untuk menginisialisasi properti:
+ *      - name
+ *      - age
+ *      - isMammal
+ * 2. Buatlah class bernama Rabbit dengan ketentuan:
+ *    - Merupakan turunan dari class Animal
+ *    - Memiliki method:
+ *      - eat yang mengembalikan nilai string `${this.name} sedang makan!`
+ *    - Ketika diinstansiasi, properti isMammal harus bernilai true
+ * 3. Buatlah class bernama Eagle dengan ketentuan:
+ *    - Merupakan turunan dari class Animal
+ *    - Memiliki method:
+ *      - fly yang mengembalikan nilai string `${this.name} sedang terbang!`
+ *    - Ketika diinstansiasi, properti isMammal harus bernilai false
+ * 4. Buatlah instance dari class Rabbit bernama "myRabbit" dengan ketentuan:
+ *    - properti name bernilai: "Labi"
+ *    - properti age bernilai: 2
+ * 5. Buatlah instance dari class Eagle bernama "myEagle" dengan ketentuan:
+ *    - properti name bernilai: "Elo"
+ *    - properti age bernilai: 4
+ */
+
+// Tulis kode di bawah ini
+
+/*1*/class Animal {
+    constructor(name, age, isMammal) {
+        this.name = name;
+        this.age = age;
+        this.isMammal = isMammal;
+    }
+}
+
+/*2*/class Rabbit extends Animal {
+    constructor(name, age) {
+        super(name, age, true); // Properti isMammal harus bernilai true saat diinstansiasi
+    }
+
+    eat() {
+        return `${this.name} sedang makan!`;
+    }
+}
+
+/*3*/class Eagle extends Animal {
+    constructor(name, age) {
+        super(name, age, false); // Properti isMammal harus bernilai true saat diinstansiasi
+    }
+
+    fly() {
+        return `${this.name} sedang terbang!`;
+    }
+}
+
+/*4*/const myRabbit = new Rabbit("Labi", 2);
+/*5*/const myEagle = new Eagle("Elo", 4);
+
+
+//Kuis Dicoding
+class CaT { }
+const cat = new CaT();
+console.log(typeof CaT);
+
+
+
+/* Paradigm Functional Programming */
+//Declarative way (What To Solve)
+const names = ['Glenn', 'Kei', 'Atay', 'zhiva'];
+const newNamesWithExcMark = names.map((nomo) => `${nomo}!`);
+
+console.log(newNamesWithExcMark);
+
+
+
+/* Konsep Dalam Functional Programming */
+
+//Pure and Impure Function
+//contoh pure function
+const createNewPerson = (nome, age) => {
+    return { ...person, age }
+}
+
+const person = {
+    nomi: 'Bobo'
+}
+
+const newPerson = createNewPerson("REHAN", 20);
+
+console.log(newPerson);
+console.log(person);
+
+
+//immutability
+
+const book = {
+    namaAwal: 'Harry',
+    namaAkhir: 'Protter'
+}
+
+const newBook = (newNamaAkhir, book) => {
+    return { ...book, namaAkhir: newNamaAkhir }
+}
+
+const createNewBook = newBook("Potter", book);
+
+console.log(createNewBook);
+
+//Rekursif
+
+const countDown = (start) => {
+    console.log(start)
+    if (start > 0) {
+        countDown(start - 1)
+    }
+}
+
+countDown(10);
+
+
+
+
+//Higher Order Function
+
+const hello = () => {
+    console.log("Hello World!")
+}
+
+const haloOrang = (strings) => {
+    console.log(`Hello ${strings}!`)
+}
+
+const doubleHello = (someFunction) => {
+    someFunction();
+}
+
+const functionInFunction = () => {
+    return () => {
+        console.log("Hellow semua")
+    }
+}
+
+hello();
+haloOrang("rehan");
+doubleHello(hello);
+functionInFunction()();
+
+//contoh lain dari higher order function
+const namo = ['Harry', 'Ron', 'Jeff', 'Thomas'];
+
+const arrayMap = (arr, action) => {
+    const loopTrough = (arr, action, newArray = [], index = 0) => {
+        const item = arr[index];
+        if (!item) return newArray;
+        return loopTrough(arr, action, [...newArray, action(arr[index])], index + 1);
+    }
+
+    return loopTrough(arr, action);
+}
+
+
+const namaBaru = arrayMap(namo, (namy) => `${namy}!`);
+
+console.log({
+    namo,
+    namaBaru,
+});
+
+
+/* Reusable Function */
+//map()
+const newArray = ['Harry', 'Ron', 'Jeff', 'Thomas'].map((name) => { return `${name}!` });
+
+console.log(newArray);
+
+//array filter()
+const truthyArray = [1, '', 'Hallo', 0, null, 'Harry', 14].filter((item) => Number(item)); //bisa Boolean,String
+
+console.log(truthyArray);
+
+const students = [
+    {
+        name: 'Harry',
+        score: 60,
+    },
+    {
+        name: 'James',
+        score: 88,
+    },
+    {
+        name: 'Ron',
+        score: 90,
+    },
+    {
+        name: 'Bethy',
+        score: 75,
+    }
+];
+
+const eligibleForScholarshipStudents = students.filter((student) => student.score > 85);
+
+console.log(eligibleForScholarshipStudents);
+
+//Array Reduce
+const murid = [
+    {
+        name: 'Harry',
+        score: 60,
+    },
+    {
+        name: 'James',
+        score: 88,
+    },
+    {
+        name: 'Ron',
+        score: 90,
+    },
+    {
+        name: 'Bethy',
+        score: 75,
+    }
+];
+//arr.reduce(callback(accumulator, currentValue, [currentIndex], [array]), [initialValue])
+const totalScore = murid.reduce((acc, siswa) => acc + siswa.score, 0);
+
+console.log(totalScore);
+
+
+//array some
+const arrays = [1, 2, 3, 4, 5, 6]
+const even = arrays.some(item => item % 2 === 0); //array some mengembalikan nilai boolean
+
+console.log(even);
+
+//array find
+const murids = [
+    {
+        name: 'Harry',
+        score: 60,
+    },
+    {
+        name: 'James',
+        score: 88,
+    },
+    {
+        name: 'Ron',
+        score: 90,
+    },
+    {
+        name: 'Bethy',
+        score: 75,
+    }
+];
+
+const findJames = murids.find(studentName => studentName.name === 'James'); //nemuin murid yang bernama name dari data array murids
+console.log(findJames);
+
+//array sort
+const months = ['March', 'Jan', 'Feb', 'Dec'];
+months.sort();
+console.log(months);
+
+const array1 = [1, 30, 4, 1000, 101, 121];
+array1.sort();
+console.log(array1);
+
+//
+
+const arrays1 = [1, 30, 4, 1000];
+//compareNumber fungsi untuk sorting dengan cara ngecek apabila a-b = negatif maka a diletakkan sebelum b, jika a-b=positif maka b diletakkan
+//sebelum a dan jika a-b=0 maka tidak ada penukaran posisi, !!!catatan a dan b merupakan 2 angka dari arrays1 diperiksa dari paling kiri
+const compareNumber = (a, b) => {
+    return a - b;
+};
+const sorting = arrays1.sort(compareNumber);
+console.log(sorting);
+
+
+
+//array Every
+//memeriksa apakah anggota dari array itu sesuai dengan kriteria yang diberikan atau tidak
+const scores = [70, 85, 90];
+const minimumScore = 65;
+
+const examPassed = scores.every(score => score >= minimumScore); //array every mengembalikan nilai boolean
+console.log(examPassed);
+
+
+//array forEach fungsi bawaan dari array yang berfungsi untuk memanggil fungsi callback pada setiap iterasi index array.
+//cara deklaratif
+const namaOrang = ['Harry', 'Ron', 'Jeff', 'Thomas'];
+
+namaOrang.forEach((name) => {
+    console.log(`Hello, ${name}!`);
+});
+//cara Imperatif
+const namaUwong = ['Harry', 'Ron', 'Jeff', 'Thomas'];
+
+for (let i = 0; i < namaUwong.length; i++) {
+    console.log(`Hello, ${namaUwong[i]}!`);
+}
